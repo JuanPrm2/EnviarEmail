@@ -24,41 +24,29 @@ import javafx.scene.layout.GridPane;
 
 public class EnviarController implements Initializable{
 
-		Email email = new SimpleEmail();
-	
+		
 	 	@FXML
 	    private TextField asuntoDelMensajeTextField;
-
 	    @FXML
 	    private Button cerrarButton;
-
 	    @FXML
 	    private CheckBox conexionSSlCheckBox;
-
 	    @FXML
 	    private PasswordField contraseniaPasswordField;
-
 	    @FXML
 	    private TextField emailRemitenteTextField;
-
 	    @FXML
 	    private TextField emailDestinatarioTextField;
-
 	    @FXML
 	    private Button enviarButton;
-
 	    @FXML
 	    private TextArea mensajeTextArea;
-
 	    @FXML
 	    private TextField nombreIPTextField;
-
 	    @FXML
 	    private TextField puertoTextField;
-
 	    @FXML
 	    private GridPane root;
-
 	    @FXML
 	    private Button vaciarButton;
 
@@ -90,7 +78,7 @@ public class EnviarController implements Initializable{
 	    @FXML
 	    void onEnviarAction(ActionEvent event) {
 	    	try {
-				
+	    		Email email = new SimpleEmail();
 	    		email.setHostName(nombreIPTextField.getText());
 	    		email.setSmtpPort( Integer.parseInt(puertoTextField.getText()));
 	    		email.setAuthenticator(new DefaultAuthenticator(emailRemitenteTextField.getText(),contraseniaPasswordField.getText() ));
@@ -103,11 +91,10 @@ public class EnviarController implements Initializable{
 	    		aciertoAlert();
 	    		
 			} catch (Exception e) {
-				errorAlert();
-				
+				errorAlert(e);
+				e.printStackTrace();
 			}
 	    }
-
 	    @FXML
 	    void onVaciarAction(ActionEvent event) {
 	    	asuntoDelMensajeTextField.clear();
@@ -117,13 +104,13 @@ public class EnviarController implements Initializable{
 	    	puertoTextField.clear();
 	    	emailRemitenteTextField.clear();
 	    	conexionSSlCheckBox.setSelected(false);
-	    	mensajeTextArea.clear();
-	    	
+	    	mensajeTextArea.clear();	
 	    }
 
 		public GridPane getRoot() {
 			return root;
 		}
+		
 		public void aciertoAlert() {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Mensaje enviado");
@@ -131,12 +118,11 @@ public class EnviarController implements Initializable{
 			alert.showAndWait();
 		}
 		
-		public void errorAlert() {
+		public void errorAlert(Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			alert.setHeaderText("No se pudo enviar el email");
-			alert.setContentText("Invalid message supplied");
-
+			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}
 
